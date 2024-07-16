@@ -1,4 +1,4 @@
-// Array to store freelancer objects
+// array to store freelancer objects
 const freelancers = [
     { name: 'Alice', occupation: 'Writer', startingPrice: 30 },
     { name: 'Bob', occupation: 'Teacher', startingPrice: 50 }
@@ -8,14 +8,16 @@ const names = ['Emma', 'Liam', 'Olivia', 'Noah', 'Ava', 'William', 'Sophia', 'Ma
 
 const occupations = ['Designer', 'Developer', 'Writer', 'Artist', 'Consultant', 'Marketer', 'Photographer', 'Videographer', 'Translator', 'Tutor'];
 
-// Function to calculate the average starting price
+// function to calculate the average starting price
+// thanks to random starting price properties, average will vary as freelancers are pushed into the array
 function calculateAveragePrice() {
     const totalPrice = freelancers.reduce((sum, freelancer) => sum + freelancer.startingPrice, 0);
     const averagePrice = totalPrice / freelancers.length;
     return averagePrice;
 }
 
-// Function to render freelancers and average price
+// function to render freelancers and average price
+// DOM manipulation to grab the <div> by its id and then create content to display on the page: magic!
 function renderFreelancers() {
     const freelancerList = document.getElementById('freelancers');
     freelancerList.innerHTML = '';
@@ -27,36 +29,14 @@ function renderFreelancers() {
     });
 
     const averagePriceElement = document.getElementById('averagePrice');
-    averagePriceElement.textContent = `Average Starting Price: $${calculateAveragePrice().toFixed(2)}`;
+    averagePriceElement.textContent = `THE AVERAGE STARTING PRICE IS $${calculateAveragePrice().toFixed(2)}`;
 }
 
-// Initial render
+// initial render
 renderFreelancers();
 
-// Simulate new freelancer every 3 seconds
-// setInterval(() => {
-//     const newFreelancer = {
-//         name: `Freelancer ${freelancers.length + 1}`,
-//         occupation: 'Programmer',
-//         startingPrice: Math.floor(Math.random() * 100) + 50
-//     };
-//     freelancers.push(newFreelancer);
-//     renderFreelancers();
-// }, 3000);
 
-// setInterval(() => {
-//     const randomName = names[Math.floor(Math.random() * names.length)];
-//     const randomOccupation = occupations[Math.floor(Math.random() * occupations.length)];
-//     const newFreelancer = {
-//         name: randomName,
-//         occupation: randomOccupation,
-//         startingPrice: Math.floor(Math.random() * 100) + 50
-//     };
-//     freelancers.push(newFreelancer);
-//     renderFreelancers();
-// }, 3000);
-
-// Add one extra freelancer and update it every 3 seconds
+// generate three random freelancers and update it every 3 seconds
 let extraFreelancer = {
     name: names[Math.floor(Math.random() * names.length)],
     occupation: occupations[Math.floor(Math.random() * occupations.length)],
@@ -65,12 +45,19 @@ let extraFreelancer = {
 freelancers.push(extraFreelancer);
 renderFreelancers();
 
+// three new names will appear every 3 seconds
 setInterval(() => {
-    extraFreelancer = {
-        name: names[Math.floor(Math.random() * names.length)],
-        occupation: occupations[Math.floor(Math.random() * occupations.length)],
-        startingPrice: Math.floor(Math.random() * 100) + 50
-    };
-    freelancers[freelancers.length - 1] = extraFreelancer;
+    freelancers.length = 0; // sets the list to 0 every render so names don't pile up
+    const newFreelancers = [];
+
+    for (let i = 0; i < 3; i++) { 
+        const extraFreelancer = {
+            name: names[Math.floor(Math.random() * names.length)],
+            occupation: occupations[Math.floor(Math.random() * occupations.length)],
+            startingPrice: Math.floor(Math.random() * 100) + 50
+        };
+        newFreelancers.push(extraFreelancer);
+    }
+    freelancers.push(...newFreelancers); // push new freelancers into the array
     renderFreelancers();
 }, 3000);
